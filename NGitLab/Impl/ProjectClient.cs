@@ -56,6 +56,11 @@ namespace NGitLab.Impl
                 url = Utils.AddParameter(url, "last_activity_after", query.LastActivityAfter.Value.UtcDateTime.ToString("O"));
             }
 
+            if (query.IdAfter.HasValue)
+            {
+                url = Utils.AddParameter(url, "id_after", query.IdAfter.Value.ToString());
+            }
+
             switch (query.Scope)
             {
                 case ProjectQueryScope.Accessible:

@@ -67,6 +67,11 @@ namespace NGitLab.Models
         public DateTimeOffset? LastActivityAfter;
 
         /// <summary>
+        /// Limit results to projects with IDs greater than the specified ID.
+        /// </summary>
+        public int? IdAfter;
+
+        /// <summary>
         /// Limit results to projects that match all of the given topics.
         /// </summary>
         public IList<string> Topics { get; } = new List<string>();
