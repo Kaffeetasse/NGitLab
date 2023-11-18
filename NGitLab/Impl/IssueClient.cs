@@ -83,6 +83,11 @@ namespace NGitLab.Impl
             return Get(IssuesUrl, query);
         }
 
+        public GitLabCollectionResponse<IssueDetailed> GetAsyncWithDetails(IssueQuery query)
+        {
+            return GetWithLabelDetails(IssuesUrl, query);
+        }
+
         public Issue GetById(int issueId)
         {
             return _api.Get().To<Issue>(string.Format(CultureInfo.InvariantCulture, IssueByIdUrl, issueId));
@@ -196,6 +201,13 @@ namespace NGitLab.Impl
         {
             url = AddIssueQueryParameters(url, query);
             return _api.Get().GetAllAsync<Issue>(url);
+        }
+
+        private GitLabCollectionResponse<IssueDetailed> GetWithLabelDetails(string url, IssueQuery query)
+        {
+            url = AddIssueQueryParameters(url, query);
+            url = Utils.AddParameter(url, "with_labels_details", true);
+            return _api.Get().GetAllAsync<IssueDetailed>(url);
         }
 
         private static string AddIssueQueryParameters(string url, IssueQuery query)

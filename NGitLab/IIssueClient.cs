@@ -180,5 +180,10 @@ namespace NGitLab
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<Issue> CloneAsync(int projectId, int issueIid, IssueClone issueClone, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get a list of issues with label details.
+        /// </summary>
+        GitLabCollectionResponse<IssueDetailed> GetAsyncWithDetails(IssueQuery query);
     }
 }

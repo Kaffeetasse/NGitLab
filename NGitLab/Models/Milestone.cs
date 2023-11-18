@@ -37,6 +37,12 @@ namespace NGitLab.Models
 
         [JsonPropertyName("updated_at")]
         public DateTime UpdatedAt;
+
+        [JsonPropertyName("web_url")]
+        public string WebUrl;
+
+        [JsonPropertyName("expired")]
+        public bool Expired;
     }
 
     public enum MilestoneState
