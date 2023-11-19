@@ -42,7 +42,7 @@ namespace NGitLab.Models
         public DateTime UpdatedAt;
 
         [JsonPropertyName("closed_at")]
-        public DateTime ClosedAt { get; set; }
+        public DateTime? ClosedAt { get; set; }
 
         [JsonPropertyName("closed_by")]
         public User ClosedBy { get; set; }

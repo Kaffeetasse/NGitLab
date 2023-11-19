@@ -1881,11 +1881,11 @@ NGitLab.Models.Issue
 NGitLab.Models.Issue.Issue() -> void
 NGitLab.Models.Issue.Labels -> string[]
 NGitLab.Models.IssueBase
+NGitLab.Models.IssueBase.ClosedAt.get -> System.DateTime?
 NGitLab.Models.IssueBase.IssueBase() -> void
 NGitLab.Models.IssueBase.Assignee -> NGitLab.Models.Assignee
 NGitLab.Models.IssueBase.Assignees -> NGitLab.Models.Assignee[]
 NGitLab.Models.IssueBase.Author -> NGitLab.Models.Author
-NGitLab.Models.IssueBase.ClosedAt.get -> System.DateTime
 NGitLab.Models.IssueBase.ClosedAt.set -> void
 NGitLab.Models.IssueBase.ClosedBy.get -> NGitLab.Models.User
 NGitLab.Models.IssueBase.ClosedBy.set -> void
