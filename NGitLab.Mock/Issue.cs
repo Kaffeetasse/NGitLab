@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using NGitLab.Models;
 
 namespace NGitLab.Mock;
 
@@ -93,6 +94,31 @@ public sealed class Issue : GitLabObject
             UpdatedAt = UpdatedAt.UtcDateTime,
             WebUrl = WebUrl,
             Confidential = Confidential,
+        };
+    }
+
+    public Models.IssueDetailed ToClientIssueDetailed()
+    {
+        return new Models.IssueDetailed
+        {
+            Id = Id,
+            IssueId = Iid,
+            ProjectId = ProjectId,
+            Title = Title,
+            Description = Description,
+            Labels = Labels.Select(q => new Models.Label { Name = q }).ToArray(),
+            Milestone = Milestone?.ToClientMilestone(),
+            Assignee = Assignee?.ToClientAssignee(),
+            Assignees = Assignees?.Select(a => a.ToClientAssignee())?.ToArray(),
+            Author = Author.ToClientAuthor(),
+            State = State.ToString(),
+            CreatedAt = CreatedAt.UtcDateTime,
+            UpdatedAt = UpdatedAt.UtcDateTime,
+            WebUrl = WebUrl,
+            Confidential = Confidential,
+            TimeStats = new TimeStats(),
+            TaskCompletionStatus = new TaskCompletionStatus(),
+            BlockingIssuesCount = 0
         };
     }
 

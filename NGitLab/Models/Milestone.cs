@@ -38,16 +38,15 @@ public class Milestone
     [JsonPropertyName("updated_at")]
     public DateTime UpdatedAt { get; set; }
 
-        [JsonPropertyName("web_url")]
-        public string WebUrl;
+    [JsonPropertyName("web_url")]
+    public string WebUrl;
 
-        [JsonPropertyName("expired")]
-        public bool Expired;
-    }
+    [JsonPropertyName("expired")]
+    public bool Expired;
+}
 
-    public enum MilestoneState
-    {
-        active,
-        closed,
-    }
+public enum MilestoneState
+{
+    active,
+    closed,
 }

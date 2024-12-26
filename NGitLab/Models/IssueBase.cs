@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace NGitLab.Models;
+
 public abstract class IssueBase
 {
     [JsonPropertyName("id")]

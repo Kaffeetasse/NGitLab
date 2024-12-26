@@ -281,6 +281,18 @@ internal sealed class IssueClient : ClientBase, IIssueClient
         return GitLabCollectionResponse.Create(Get(query));
     }
 
+    public GitLabCollectionResponse<IssueDetailed> GetAsyncWithDetails(IssueQuery query)
+    {
+        List<IssueDetailed> result;
+        using (Context.BeginOperationScope())
+        {
+            var viewableProjects = Server.AllProjects.Where(p => p.CanUserViewProject(Context.User));
+            var issues = viewableProjects.SelectMany(p => p.Issues.Where(i => i.CanUserViewIssue(Context.User)));
+            result = FilterByQuery(issues, query).Select(i => i.ToClientIssueDetailed()).ToList();
+        }
+        return GitLabCollectionResponse.Create(result);
+    }
+
     public IEnumerable<Models.Issue> Get(long projectId, IssueQuery query)
     {
         using (Context.BeginOperationScope())

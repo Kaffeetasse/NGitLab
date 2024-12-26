@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace NGitLab.Models;
 
-public class Issue
+public class Issue : IssueBase
 {
     [JsonPropertyName("labels")]
     public string[] Labels { get; set; }
