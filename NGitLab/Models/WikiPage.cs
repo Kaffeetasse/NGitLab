@@ -1,19 +1,18 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class WikiPage
 {
-    public class WikiPage
-    {
-        [JsonPropertyName("content")]
-        public string Content;
+    [JsonPropertyName("content")]
+    public string Content { get; set; }
 
-        [JsonPropertyName("format")]
-        public string Format;
+    [JsonPropertyName("format")]
+    public string Format { get; set; }
 
-        [JsonPropertyName("slug")]
-        public string Slug;
+    [JsonPropertyName("slug")]
+    public string Slug { get; set; }
 
-        [JsonPropertyName("title")]
-        public string Title;
-    }
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
 }

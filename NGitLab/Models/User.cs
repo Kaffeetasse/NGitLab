@@ -2,152 +2,139 @@
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+[DebuggerDisplay("{Name}")]
+public class User
 {
-    [DebuggerDisplay("{Name}")]
-    public class User
-    {
-        public const string Url = "/users";
+    public const string Url = "/users";
 
-        [JsonPropertyName("id")]
-        public int Id;
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
 
-        [JsonPropertyName("name")]
-        public string Name;
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        [JsonPropertyName("username")]
-        public string Username;
+    [JsonPropertyName("username")]
+    public string Username { get; set; }
 
-        [JsonPropertyName("state")]
-        public string State;
+    [JsonPropertyName("state")]
+    public string State { get; set; }
 
-        [JsonPropertyName("avatar_url")]
-        public string AvatarURL;
+    [JsonPropertyName("avatar_url")]
+    public string AvatarURL { get; set; }
 
-        [JsonPropertyName("web_url")]
-        public string WebURL;
+    [JsonPropertyName("web_url")]
+    public string WebURL { get; set; }
 
-        [JsonPropertyName("created_at")]
-        public DateTime CreatedAt;
+    [JsonPropertyName("created_at")]
+    public DateTime CreatedAt { get; set; }
 
-        [JsonPropertyName("bio")]
-        public string Bio;
+    [JsonPropertyName("bio")]
+    public string Bio { get; set; }
 
-        [JsonPropertyName("bio_html")]
-        public string BioHtml;
+    [JsonPropertyName("bio_html")]
+    public string BioHtml { get; set; }
 
-        [JsonPropertyName("location")]
-        public string Location;
+    [JsonPropertyName("location")]
+    public string Location { get; set; }
 
-        [JsonPropertyName("public_email")]
-        public string PublicEmail;
+    [JsonPropertyName("public_email")]
+    public string PublicEmail { get; set; }
 
-        [JsonPropertyName("skype")]
-        public string Skype;
+    [JsonPropertyName("skype")]
+    public string Skype { get; set; }
 
-        [JsonPropertyName("linkedin")]
-        public string Linkedin;
+    [JsonPropertyName("linkedin")]
+    public string Linkedin { get; set; }
 
-        [JsonPropertyName("twitter")]
-        public string Twitter;
+    [JsonPropertyName("twitter")]
+    public string Twitter { get; set; }
 
-        [JsonPropertyName("website_url")]
-        public string WebsiteURL;
+    [JsonPropertyName("website_url")]
+    public string WebsiteURL { get; set; }
 
-        [JsonPropertyName("organization")]
-        public string Organization;
+    [JsonPropertyName("organization")]
+    public string Organization { get; set; }
 
-        [JsonPropertyName("job_title")]
-        public string JobTitle;
+    [JsonPropertyName("job_title")]
+    public string JobTitle { get; set; }
 
-        [JsonPropertyName("bot")]
-        public bool Bot;
+    [JsonPropertyName("bot")]
+    public bool Bot { get; set; }
 
-        [JsonPropertyName("work_information")]
-        public string WorkInformation;
+    [JsonPropertyName("work_information")]
+    public string WorkInformation { get; set; }
 
-        [JsonPropertyName("followers")]
-        public int Followers;
+    [JsonPropertyName("followers")]
+    public int Followers { get; set; }
 
-        [JsonPropertyName("following")]
-        public int Following;
+    [JsonPropertyName("following")]
+    public int Following { get; set; }
 
-        [JsonPropertyName("last_sign_in_at")]
-        public DateTime LastSignIn;
+    [JsonPropertyName("last_sign_in_at")]
+    public DateTime LastSignIn { get; set; }
 
-        [JsonPropertyName("confirmed_at")]
-        public DateTime ConfirmedAt;
+    [JsonPropertyName("confirmed_at")]
+    public DateTime ConfirmedAt { get; set; }
 
-        [JsonPropertyName("last_activity_on")]
-        public DateTime LastActivityOn;
+    [JsonPropertyName("last_activity_on")]
+    public DateTime LastActivityOn { get; set; }
 
-        [JsonPropertyName("email")]
-        public string Email;
+    [JsonPropertyName("email")]
+    public string Email { get; set; }
 
-        [JsonPropertyName("theme_id")]
-        public int ThemeId;
+    [JsonPropertyName("theme_id")]
+    public long ThemeId { get; set; }
 
-        [JsonPropertyName("color_scheme_id")]
-        public int ColorSchemeId;
+    [JsonPropertyName("color_scheme_id")]
+    public long ColorSchemeId { get; set; }
 
-        [JsonPropertyName("projects_limit")]
-        public int ProjectsLimit;
+    [JsonPropertyName("projects_limit")]
+    public int ProjectsLimit { get; set; }
 
-        [JsonPropertyName("current_sign_in_at")]
-        public DateTime CurrentSignIn;
+    [JsonPropertyName("current_sign_in_at")]
+    public DateTime CurrentSignIn { get; set; }
 
-        [JsonPropertyName("identities")]
-        public Identity[] Identities;
+    [JsonPropertyName("identities")]
+    public Identity[] Identities { get; set; }
 
-        [Obsolete("Does not match GitLab's API. Use 'Identities.Provider' instead.")]
-        [JsonIgnore]
-        public string Provider;
+    [JsonPropertyName("can_create_group")]
+    public bool CanCreateGroup { get; set; }
 
-        [Obsolete("Does not match GitLab's API. Use 'Identities.ExternUid' instead.")]
-        [JsonIgnore]
-        public string ExternUid;
+    [JsonPropertyName("can_create_project")]
+    public bool CanCreateProject { get; set; }
 
-        [Obsolete("Does not match GitLab's API. Use 'State' instead.")]
-        [JsonIgnore]
-        public bool Blocked;
+    [JsonPropertyName("two_factor_enabled")]
+    public bool TwoFactorEnabled { get; set; }
 
-        [JsonPropertyName("can_create_group")]
-        public bool CanCreateGroup;
+    [JsonPropertyName("external")]
+    public bool External { get; set; }
 
-        [JsonPropertyName("can_create_project")]
-        public bool CanCreateProject;
+    [JsonPropertyName("private_profile")]
+    public bool PrivateProfile { get; set; }
 
-        [JsonPropertyName("two_factor_enabled")]
-        public bool TwoFactorEnabled;
+    [JsonPropertyName("commit_email")]
+    public string CommitEmail { get; set; }
 
-        [JsonPropertyName("external")]
-        public bool External;
+    [JsonPropertyName("shared_runners_minutes_limit")]
+    public int SharedRunnersMinutesLimit { get; set; }
 
-        [JsonPropertyName("private_profile")]
-        public bool PrivateProfile;
+    [JsonPropertyName("extra_shared_runners_minutes_limit")]
+    public int ExtraSharedRunnersMinutesLimit { get; set; }
 
-        [JsonPropertyName("commit_email")]
-        public string CommitEmail;
+    [JsonPropertyName("is_admin")]
+    public bool IsAdmin { get; set; }
 
-        [JsonPropertyName("shared_runners_minutes_limit")]
-        public int SharedRunnersMinutesLimit;
+    [JsonPropertyName("note")]
+    public string Note { get; set; }
 
-        [JsonPropertyName("extra_shared_runners_minutes_limit")]
-        public int ExtraSharedRunnersMinutesLimit;
+    [JsonPropertyName("using_license_seat")]
+    public bool UsingLicenseSeat { get; set; }
 
-        [JsonPropertyName("is_admin")]
-        public bool IsAdmin;
+    [JsonPropertyName("is_auditor")]
+    public bool IsAuditor { get; set; }
 
-        [JsonPropertyName("note")]
-        public string Note;
-
-        [JsonPropertyName("using_license_seat")]
-        public bool UsingLicenseSeat;
-
-        [JsonPropertyName("is_auditor")]
-        public bool IsAuditor;
-
-        [JsonPropertyName("provisioned_by_group_id")]
-        public int ProvisionedByGroupId;
-    }
+    [JsonPropertyName("provisioned_by_group_id")]
+    public long ProvisionedByGroupId { get; set; }
 }

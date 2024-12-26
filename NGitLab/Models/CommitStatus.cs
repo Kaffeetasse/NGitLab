@@ -1,40 +1,33 @@
-﻿using System.ComponentModel;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class CommitStatus
 {
-    public class CommitStatus
-    {
-        // This is NOT the 'Project Id', but some kind of (undocumented) 'Commit Status Id'
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public int ProjectId;
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
 
-        [JsonPropertyName("id")]
-        public int Id { get => ProjectId; set => ProjectId = value; }
+    [JsonPropertyName("sha")]
+    public string CommitSha { get; set; }
 
-        [JsonPropertyName("sha")]
-        public string CommitSha;
+    [JsonPropertyName("ref")]
+    public string Ref { get; set; }
 
-        [JsonPropertyName("ref")]
-        public string Ref;
+    [JsonPropertyName("status")]
+    public string Status { get; set; }
 
-        [JsonPropertyName("status")]
-        public string Status;
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        [JsonPropertyName("name")]
-        public string Name;
+    [JsonPropertyName("target_url")]
+    public string TargetUrl { get; set; }
 
-        [JsonPropertyName("target_url")]
-        public string TargetUrl;
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 
-        [JsonPropertyName("description")]
-        public string Description;
+    [JsonPropertyName("coverage")]
+    public int? Coverage { get; set; }
 
-        [JsonPropertyName("coverage")]
-        public int? Coverage;
-
-        [JsonPropertyName("author")]
-        public Author Author;
-    }
+    [JsonPropertyName("author")]
+    public Author Author { get; set; }
 }

@@ -2,35 +2,24 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+[EditorBrowsable(EditorBrowsableState.Never)]
+public class LabelEdit
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public class LabelEdit
-    {
-        public LabelEdit()
-        {
-        }
+    [JsonIgnore]
+    public long Id { get; set; }
 
-        public LabelEdit(int projectId, Label label)
-        {
-            Id = projectId;
-            Name = label.Name;
-        }
+    [Required]
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        [JsonIgnore]
-        public int Id;
+    [JsonPropertyName("new_name")]
+    public string NewName { get; set; }
 
-        [Required]
-        [JsonPropertyName("name")]
-        public string Name;
+    [JsonPropertyName("color")]
+    public string Color { get; set; }
 
-        [JsonPropertyName("new_name")]
-        public string NewName;
-
-        [JsonPropertyName("color")]
-        public string Color;
-
-        [JsonPropertyName("description")]
-        public string Description;
-    }
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 }

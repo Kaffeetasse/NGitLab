@@ -1,19 +1,18 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class MilestoneCreate
 {
-    public class MilestoneCreate
-    {
-        [JsonPropertyName("title")]
-        public string Title;
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
 
-        [JsonPropertyName("description")]
-        public string Description;
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 
-        [JsonPropertyName("due_date")]
-        public string DueDate;
+    [JsonPropertyName("due_date")]
+    public string DueDate { get; set; }
 
-        [JsonPropertyName("start_date")]
-        public string StartDate;
-    }
+    [JsonPropertyName("start_date")]
+    public string StartDate { get; set; }
 }

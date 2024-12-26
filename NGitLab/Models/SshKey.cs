@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class SshKey
 {
-    public class SshKey
-    {
-        [JsonPropertyName("id")]
-        public int Id;
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
 
-        [JsonPropertyName("title")]
-        public string Title;
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
 
-        [JsonPropertyName("key")]
-        public string Key;
+    [JsonPropertyName("key")]
+    public string Key { get; set; }
 
-        [JsonPropertyName("created_at")]
-        public DateTime CreateAt;
-    }
+    [JsonPropertyName("created_at")]
+    public DateTime CreateAt { get; set; }
 }

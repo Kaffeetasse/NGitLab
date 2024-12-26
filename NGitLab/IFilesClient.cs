@@ -2,22 +2,29 @@
 using System.Threading.Tasks;
 using NGitLab.Models;
 
-namespace NGitLab
+namespace NGitLab;
+
+public interface IFilesClient
 {
-    public interface IFilesClient
-    {
-        void Create(FileUpsert file);
+    void Create(FileUpsert file);
 
-        void Update(FileUpsert file);
+    Task UpdateAsync(FileUpsert file, CancellationToken cancellationToken = default);
 
-        void Delete(FileDelete file);
+    void Update(FileUpsert file);
 
-        FileData Get(string filePath, string @ref);
+    Task CreateAsync(FileUpsert file, CancellationToken cancellationToken = default);
 
-        Task<FileData> GetAsync(string filePath, string @ref, CancellationToken cancellationToken = default);
+    void Delete(FileDelete file);
 
-        bool FileExists(string filePath, string @ref);
+    Task DeleteAsync(FileDelete file, CancellationToken cancellationToken = default);
 
-        Blame[] Blame(string filePath, string @ref);
-    }
+    FileData Get(string filePath, string @ref);
+
+    Task<FileData> GetAsync(string filePath, string @ref, CancellationToken cancellationToken = default);
+
+    bool FileExists(string filePath, string @ref);
+
+    Task<bool> FileExistsAsync(string filePath, string @ref, CancellationToken cancellationToken = default);
+
+    Blame[] Blame(string filePath, string @ref);
 }

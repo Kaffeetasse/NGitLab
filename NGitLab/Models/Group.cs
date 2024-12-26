@@ -1,54 +1,60 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class Group
 {
-    public class Group
-    {
-        public const string Url = "/groups";
+    public const string Url = "/groups";
 
-        [JsonPropertyName("id")]
-        public int Id;
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
 
-        [JsonPropertyName("name")]
-        public string Name;
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        [JsonPropertyName("path")]
-        public string Path;
+    [JsonPropertyName("path")]
+    public string Path { get; set; }
 
-        [JsonPropertyName("description")]
-        public string Description;
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 
-        [JsonPropertyName("visibility")]
-        public VisibilityLevel Visibility;
+    [JsonPropertyName("visibility")]
+    public VisibilityLevel Visibility { get; set; }
 
-        [JsonPropertyName("lfs_enabled")]
-        public bool LfsEnabled;
+    [JsonPropertyName("lfs_enabled")]
+    public bool LfsEnabled { get; set; }
 
-        [JsonPropertyName("avatar_url")]
-        public string AvatarUrl;
+    [JsonPropertyName("avatar_url")]
+    public string AvatarUrl { get; set; }
 
-        [JsonPropertyName("request_access_enabled")]
-        public bool RequestAccessEnabled;
+    [JsonPropertyName("request_access_enabled")]
+    public bool RequestAccessEnabled { get; set; }
 
-        [JsonPropertyName("full_name")]
-        public string FullName;
+    [JsonPropertyName("full_name")]
+    public string FullName { get; set; }
 
-        [JsonPropertyName("full_path")]
-        public string FullPath;
+    [JsonPropertyName("full_path")]
+    public string FullPath { get; set; }
 
-        [JsonPropertyName("parent_id")]
-        public int? ParentId;
+    [JsonPropertyName("parent_id")]
+    public long? ParentId { get; set; }
 
-        [JsonPropertyName("projects")]
-        public Project[] Projects;
+    [JsonPropertyName("runners_token")]
+    public string RunnersToken { get; set; }
 
-        [JsonPropertyName("shared_runners_minutes_limit")]
-        public int? SharedRunnersMinutesLimit;
+    [JsonPropertyName("projects")]
+    public Project[] Projects { get; set; }
 
-        [JsonPropertyName("extra_shared_runners_minutes_limit")]
-        public int? ExtraSharedRunnersMinutesLimit;
+    [JsonPropertyName("shared_runners_minutes_limit")]
+    public int? SharedRunnersMinutesLimit { get; set; }
 
-        [JsonPropertyName("marked_for_deletion_on")]
-        public string MarkedForDeletionOn;
-    }
+    [JsonPropertyName("extra_shared_runners_minutes_limit")]
+    public int? ExtraSharedRunnersMinutesLimit { get; set; }
+
+    [JsonPropertyName("marked_for_deletion_on")]
+    public string MarkedForDeletionOn { get; set; }
+
+    [JsonPropertyName("created_at")]
+    public DateTime CreatedAt { get; set; }
 }

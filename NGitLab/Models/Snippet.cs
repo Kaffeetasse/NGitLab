@@ -1,36 +1,31 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class Snippet
 {
-    public class Snippet
-    {
-        [JsonPropertyName("id")]
-        public int Id;
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
 
-        [JsonPropertyName("title")]
-        public string Title;
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
 
-        [JsonPropertyName("file_name")]
-        [Obsolete("Consider using the Files array that support more than one file.")]
-        public string FileName;
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 
-        [JsonPropertyName("description")]
-        public string Description;
+    [JsonPropertyName("author")]
+    public Author Author { get; set; }
 
-        [JsonPropertyName("author")]
-        public Author Author;
+    [JsonPropertyName("updated_at")]
+    public string UpdatedAt { get; set; }
 
-        [JsonPropertyName("updated_at")]
-        public string UpdatedAt;
+    [JsonPropertyName("created_at")]
+    public DateTime CreatedAt { get; set; }
 
-        [JsonPropertyName("created_at")]
-        public DateTime CreatedAt;
+    [JsonPropertyName("web_url")]
+    public string WebUrl { get; set; }
 
-        [JsonPropertyName("web_url")]
-        public string WebUrl;
-
-        [JsonPropertyName("files")]
-        public SnippetFile[] Files { get; set; }
-    }
+    [JsonPropertyName("files")]
+    public SnippetFile[] Files { get; set; }
 }

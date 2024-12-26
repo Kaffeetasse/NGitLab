@@ -1,50 +1,61 @@
 ﻿using System.Collections.Generic;
 using NGitLab.Models;
 
-namespace NGitLab
+namespace NGitLab;
+
+public interface IProjectBadgeClient
 {
-    public interface IProjectBadgeClient
-    {
-        IEnumerable<Badge> All { get; }
+    IEnumerable<Badge> All { get; }
 
-        /// <summary>
-        /// Gets the project's badges only (not group badges)
-        /// </summary>
-        /// <remarks>Project Badge API returns both Group and Project badges</remarks>
-        IEnumerable<Badge> ProjectsOnly { get; }
+    /// <summary>
+    /// Gets the project's badges only (not group badges)
+    /// </summary>
+    /// <remarks>Project Badge API returns both Group and Project badges</remarks>
+    IEnumerable<Badge> ProjectsOnly { get; }
 
-        Badge this[int id] { get; }
+    Badge this[long id] { get; }
 
-        Badge Create(BadgeCreate badge);
+    Badge Create(BadgeCreate badge);
 
-        Badge Update(int id, BadgeUpdate badge);
+    Badge Update(long id, BadgeUpdate badge);
 
-        void Delete(int id);
-    }
+    void Delete(long id);
+}
 
-    public interface IProjectVariableClient
-    {
-        IEnumerable<Variable> All { get; }
+public interface IProjectVariableClient
+{
+    IEnumerable<Variable> All { get; }
 
-        Variable this[string key] { get; }
+    Variable this[string key] { get; }
 
-        Variable Create(VariableCreate model);
+    Variable this[string key, string environmentScope] { get; }
 
-        Variable Update(string key, VariableUpdate model);
+    Variable Create(VariableCreate model);
 
-        void Delete(string key);
-    }
+    Variable Update(string key, VariableUpdate model);
 
-    public interface IGroupVariableClient
-    {
-        IEnumerable<Variable> All { get; }
+    Variable Update(string key, string environmentScope, VariableUpdate model);
 
-        Variable this[string key] { get; }
+    void Delete(string key);
 
-        Variable Create(VariableCreate model);
+    void Delete(string key, string environmentScope);
+}
 
-        Variable Update(string key, VariableUpdate model);
+public interface IGroupVariableClient
+{
+    IEnumerable<Variable> All { get; }
 
-        void Delete(string key);
-    }
+    Variable this[string key] { get; }
+
+    Variable this[string key, string environmentScope] { get; }
+
+    Variable Create(VariableCreate model);
+
+    Variable Update(string key, VariableUpdate model);
+
+    Variable Update(string key, string environmentScope, VariableUpdate model);
+
+    void Delete(string key);
+
+    void Delete(string key, string environmentScope);
 }

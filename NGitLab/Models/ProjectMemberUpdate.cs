@@ -1,16 +1,15 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class ProjectMemberUpdate
 {
-    public class ProjectMemberUpdate
-    {
-        [JsonPropertyName("user_id")]
-        public string UserId;
+    [JsonPropertyName("user_id")]
+    public string UserId { get; set; }
 
-        [JsonPropertyName("access_level")]
-        public AccessLevel AccessLevel;
+    [JsonPropertyName("access_level")]
+    public AccessLevel AccessLevel { get; set; }
 
-        [JsonPropertyName("expires_at")]
-        public string ExpiresAt;
-    }
+    [JsonPropertyName("expires_at")]
+    public string ExpiresAt { get; set; }
 }

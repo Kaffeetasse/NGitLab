@@ -1,19 +1,18 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class RunnerId
 {
-    public class RunnerId
+    public RunnerId()
     {
-        public RunnerId()
-        {
-        }
-
-        public RunnerId(int id)
-        {
-            Id = id;
-        }
-
-        [JsonPropertyName("runner_id")]
-        public int Id;
     }
+
+    public RunnerId(long id)
+    {
+        Id = id;
+    }
+
+    [JsonPropertyName("runner_id")]
+    public long Id { get; set; }
 }

@@ -1,50 +1,47 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using NGitLab.Impl.Json;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class IssueEdit
 {
-    public class IssueEdit
-    {
-        [JsonIgnore]
-        public int ProjectId { get => Id; set => Id = value; }
+    [JsonIgnore]
+    public long ProjectId { get; set; }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public int Id;
+    [Required]
+    [JsonPropertyName("issue_id")]
+    public long IssueId { get; set; }
 
-        [Required]
-        [JsonPropertyName("issue_id")]
-        public int IssueId;
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
 
-        [JsonPropertyName("title")]
-        public string Title;
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 
-        [JsonPropertyName("description")]
-        public string Description;
+    [JsonPropertyName("assignee_id")]
+    public long? AssigneeId { get; set; }
 
-        [JsonPropertyName("assignee_id")]
-        public int? AssigneeId;
+    [JsonPropertyName("assignee_ids")]
+    public long[] AssigneeIds { get; set; }
 
-        [JsonPropertyName("assignee_ids")]
-        public int[] AssigneeIds;
+    [JsonPropertyName("milestone_id")]
+    public long? MilestoneId { get; set; }
 
-        [JsonPropertyName("milestone_id")]
-        public int? MilestoneId;
+    [JsonPropertyName("labels")]
+    public string Labels { get; set; }
 
-        [JsonPropertyName("labels")]
-        public string Labels;
+    [JsonPropertyName("state_event")]
+    public string State { get; set; }
 
-        [JsonPropertyName("state_event")]
-        public string State;
+    [JsonPropertyName("due_date")]
+    [JsonConverter(typeof(DateOnlyConverter))]
+    public DateTime? DueDate { get; set; }
 
-        [JsonPropertyName("due_date")]
-        [JsonConverter(typeof(DateOnlyConverter))]
-        public DateTime? DueDate;
+    [JsonPropertyName("epic_id")]
+    public long? EpicId { get; set; }
 
-        [JsonPropertyName("epic_id")]
-        public int? EpicId;
-    }
+    [JsonPropertyName("weight")]
+    public int? Weight { get; set; }
 }

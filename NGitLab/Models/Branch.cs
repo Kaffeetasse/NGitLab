@@ -1,31 +1,30 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class Branch
 {
-    public class Branch
-    {
-        [JsonPropertyName("name")]
-        public string Name;
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        [JsonPropertyName("merged")]
-        public bool Merged;
+    [JsonPropertyName("merged")]
+    public bool Merged { get; set; }
 
-        [JsonPropertyName("protected")]
-        public bool Protected;
+    [JsonPropertyName("protected")]
+    public bool Protected { get; set; }
 
-        [JsonPropertyName("default")]
-        public bool Default;
+    [JsonPropertyName("default")]
+    public bool Default { get; set; }
 
-        [JsonPropertyName("developers_can_push")]
-        public bool DevelopersCanPush;
+    [JsonPropertyName("developers_can_push")]
+    public bool DevelopersCanPush { get; set; }
 
-        [JsonPropertyName("developers_can_merge")]
-        public bool DevelopersCanMerge;
+    [JsonPropertyName("developers_can_merge")]
+    public bool DevelopersCanMerge { get; set; }
 
-        [JsonPropertyName("can_push")]
-        public bool CanPush;
+    [JsonPropertyName("can_push")]
+    public bool CanPush { get; set; }
 
-        [JsonPropertyName("commit")]
-        public CommitInfo Commit;
-    }
+    [JsonPropertyName("commit")]
+    public CommitInfo Commit { get; set; }
 }

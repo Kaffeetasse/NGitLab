@@ -1,28 +1,27 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class ProjectLinks
 {
-    public class ProjectLinks
-    {
-        [JsonPropertyName("self")]
-        public string Self;
+    [JsonPropertyName("self")]
+    public string Self { get; set; }
 
-        [JsonPropertyName("issues")]
-        public string Issues;
+    [JsonPropertyName("issues")]
+    public string Issues { get; set; }
 
-        [JsonPropertyName("merge_requests")]
-        public string MergeRequests;
+    [JsonPropertyName("merge_requests")]
+    public string MergeRequests { get; set; }
 
-        [JsonPropertyName("repo_branches")]
-        public string RepoBranches;
+    [JsonPropertyName("repo_branches")]
+    public string RepoBranches { get; set; }
 
-        [JsonPropertyName("labels")]
-        public string Labels;
+    [JsonPropertyName("labels")]
+    public string Labels { get; set; }
 
-        [JsonPropertyName("events")]
-        public string Events;
+    [JsonPropertyName("events")]
+    public string Events { get; set; }
 
-        [JsonPropertyName("members")]
-        public string Members;
-    }
+    [JsonPropertyName("members")]
+    public string Members { get; set; }
 }

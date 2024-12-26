@@ -1,40 +1,33 @@
-﻿using System.ComponentModel;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class CommitStatusCreate
 {
-    public class CommitStatusCreate
-    {
-        // Unnecessary in the POSTed JSON; the 'Project Id' is actually specified through the endpoint URL.
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public int ProjectId;
+    [JsonPropertyName("sha")]
+    public string CommitSha { get; set; }
 
-        [JsonPropertyName("sha")]
-        public string CommitSha;
+    [JsonPropertyName("state")]
+    public string State { get; set; }
 
-        [JsonPropertyName("state")]
-        public string State;
+    [JsonPropertyName("status")]
+    public string Status { get; set; }
 
-        [JsonPropertyName("status")]
-        public string Status;
+    [JsonPropertyName("ref")]
+    public string Ref { get; set; }
 
-        [JsonPropertyName("ref")]
-        public string Ref;
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
-        [JsonPropertyName("name")]
-        public string Name;
+    [JsonPropertyName("target_url")]
+    public string TargetUrl { get; set; }
 
-        [JsonPropertyName("target_url")]
-        public string TargetUrl;
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 
-        [JsonPropertyName("description")]
-        public string Description;
+    [JsonPropertyName("coverage")]
+    public int? Coverage { get; set; }
 
-        [JsonPropertyName("coverage")]
-        public int? Coverage;
-
-        [JsonPropertyName("pipeline_id")]
-        public int? PipelineId;
-    }
+    [JsonPropertyName("pipeline_id")]
+    public long? PipelineId { get; set; }
 }

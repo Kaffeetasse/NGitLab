@@ -1,22 +1,21 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class RunnerUpdate
 {
-    public class RunnerUpdate
-    {
-        [JsonPropertyName("active")]
-        public bool? Active;
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 
-        [JsonPropertyName("description")]
-        public string Description;
+    [JsonPropertyName("paused")]
+    public bool? Paused { get; set; }
 
-        [JsonPropertyName("locked")]
-        public bool? Locked;
+    [JsonPropertyName("locked")]
+    public bool? Locked { get; set; }
 
-        [JsonPropertyName("run_untagged")]
-        public bool? RunUntagged;
+    [JsonPropertyName("run_untagged")]
+    public bool? RunUntagged { get; set; }
 
-        [JsonPropertyName("tag_list")]
-        public string[] TagList;
-    }
+    [JsonPropertyName("tag_list")]
+    public string[] TagList { get; set; }
 }

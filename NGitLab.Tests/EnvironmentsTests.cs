@@ -5,264 +5,269 @@ using NGitLab.Models;
 using NGitLab.Tests.Docker;
 using NUnit.Framework;
 
-namespace NGitLab.Tests
+namespace NGitLab.Tests;
+
+public class EnvironmentsTests
 {
-    public class EnvironmentsTests
+    private static string GetSlugNameStart(string name)
     {
-        private static string GetSlugNameStart(string name)
+        if (name.Length > 17)
+            name = name[..17];
+        return name.Replace('_', '-');
+    }
+
+    [Test]
+    [NGitLabRetry]
+    public async Task CreateAndGetAll()
+    {
+        using var context = await GitLabTestContext.CreateAsync();
+        var project = context.CreateProject();
+        var envClient = context.Client.GetEnvironmentClient(project.Id);
+
+        var newEnvNameNoUrl = "env_test_name_no_url";
+        var newEnvSlugNameNoUrlStart = GetSlugNameStart(newEnvNameNoUrl);
+        var newEnvNameWithUrl = "env_test_name_with_url";
+        var newEnvSlugNameWithUrlStart = GetSlugNameStart(newEnvNameWithUrl);
+        var newEnvNameExternalUrl = "https://www.example.com";
+
+        // Validate environments doesn't exist yet
+        Assert.That(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameNoUrl, StringComparison.Ordinal) || string.Equals(e.Name, newEnvNameWithUrl, StringComparison.Ordinal)), Is.Null);
+
+        // Create  and check return value
+        var env = envClient.Create(newEnvNameNoUrl, externalUrl: null);
+        Assert.That(env.Name, Is.EqualTo(newEnvNameNoUrl).IgnoreCase);
+        Assert.That(env.Slug, Does.StartWith(newEnvSlugNameNoUrlStart));
+        Assert.That(env.Id, Is.Not.Zero);
+        Assert.That(env.ExternalUrl, Is.Null);
+
+        // Create newEnvNameWithUrl and check return value
+        env = envClient.Create(newEnvNameWithUrl, newEnvNameExternalUrl);
+        Assert.That(env.Name, Is.EqualTo(newEnvNameWithUrl).IgnoreCase);
+        Assert.That(env.Slug, Does.StartWith(newEnvSlugNameWithUrlStart));
+        Assert.That(env.Id, Is.Not.Zero);
+        Assert.That(env.ExternalUrl, Is.EqualTo(newEnvNameExternalUrl).IgnoreCase);
+
+        // Validate new environment are present in All
+        env = envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameNoUrl, StringComparison.Ordinal));
+        Assert.That(env, Is.Not.Null);
+        Assert.That(env.Slug, Does.StartWith(newEnvSlugNameNoUrlStart));
+        Assert.That(env.Id, Is.Not.Zero);
+        Assert.That(env.ExternalUrl, Is.Null);
+
+        env = envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameWithUrl, StringComparison.Ordinal));
+        Assert.That(env, Is.Not.Null);
+        Assert.That(env.Slug, Does.StartWith(newEnvSlugNameWithUrlStart));
+        Assert.That(env.Id, Is.Not.Zero);
+        Assert.That(env.ExternalUrl, Is.EqualTo(newEnvNameExternalUrl).IgnoreCase);
+    }
+
+    [Test]
+    [NGitLabRetry]
+    public async Task Edit()
+    {
+        using var context = await GitLabTestContext.CreateAsync();
+        var project = context.CreateProject();
+        var envClient = context.Client.GetEnvironmentClient(project.Id);
+
+        var newEnvNameToEdit = "env_test_name_to_edit_init";
+        var newEnvNameUpdated = "env_test_name_to_edit_updated";
+        var newEnvSlugNameUpdatedStart = GetSlugNameStart(newEnvNameUpdated);
+        var newEnvNameExternalUrlUpdated = "https://www.example.com/updated";
+
+        // Validate environments doesn't exist yet
+        Assert.That(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToEdit, StringComparison.Ordinal) || string.Equals(e.Name, newEnvNameUpdated, StringComparison.Ordinal)), Is.Null);
+
+        // Create newEnvNameToEdit
+        var env = envClient.Create(newEnvNameToEdit, externalUrl: null);
+        var initialEnvId = env.Id;
+
+        // Validate newEnvNameToEdit is present
+        Assert.That(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToEdit, StringComparison.Ordinal)), Is.Not.Null);
+
+        // Edit and check return value
+        env = envClient.Edit(initialEnvId, newEnvNameUpdated, newEnvNameExternalUrlUpdated);
+
+        if (context.IsGitLabMajorVersion(15))
         {
-            if (name.Length > 17)
-                name = name[..17];
-            return name.Replace('_', '-');
+            Assert.That(env.Name, Is.EqualTo(newEnvNameUpdated).IgnoreCase);
         }
 
-        [Test]
-        [NGitLabRetry]
-        public async Task CreateAndGetAll()
-        {
-            using var context = await GitLabTestContext.CreateAsync();
-            var project = context.CreateProject();
-            var envClient = context.Client.GetEnvironmentClient(project.Id);
+        Assert.That(env.Slug, Does.StartWith(newEnvSlugNameUpdatedStart));
+        Assert.That(env.Id, Is.EqualTo(initialEnvId), "Environment Id should not change");
+        Assert.That(env.ExternalUrl, Is.EqualTo(newEnvNameExternalUrlUpdated).IgnoreCase);
 
-            var newEnvNameNoUrl = "env_test_name_no_url";
-            var newEnvSlugNameNoUrlStart = GetSlugNameStart(newEnvNameNoUrl);
-            var newEnvNameWithUrl = "env_test_name_with_url";
-            var newEnvSlugNameWithUrlStart = GetSlugNameStart(newEnvNameWithUrl);
-            var newEnvNameExternalUrl = "https://www.example.com";
+        // Validate update is effective
+        // Renaming an environment with the API removed in GitLab 16.0.
+        env = envClient.All.FirstOrDefault(e => string.Equals(e.Name, context.IsGitLabMajorVersion(15) ? newEnvNameUpdated : newEnvNameToEdit, StringComparison.Ordinal));
+        Assert.That(env, Is.Not.Null);
+        Assert.That(env.Slug, Does.StartWith(newEnvSlugNameUpdatedStart));
+        Assert.That(env.Id, Is.EqualTo(initialEnvId), "Environment Id should not change");
+        Assert.That(env.ExternalUrl, Is.EqualTo(newEnvNameExternalUrlUpdated).IgnoreCase);
+    }
 
-            // Validate environments doesn't exist yet
-            Assert.IsNull(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameNoUrl, StringComparison.Ordinal) || string.Equals(e.Name, newEnvNameWithUrl, StringComparison.Ordinal)));
+    [Test]
+    [NGitLabRetry]
+    public async Task Delete()
+    {
+        using var context = await GitLabTestContext.CreateAsync();
+        var project = context.CreateProject();
+        var envClient = context.Client.GetEnvironmentClient(project.Id);
 
-            // Create  and check return value
-            var env = envClient.Create(newEnvNameNoUrl, externalUrl: null);
-            StringAssert.AreEqualIgnoringCase(newEnvNameNoUrl, env.Name);
-            StringAssert.StartsWith(newEnvSlugNameNoUrlStart, env.Slug);
-            Assert.NotZero(env.Id);
-            Assert.IsNull(env.ExternalUrl);
+        var newEnvNameToDelete = "env_test_name_to_delete";
 
-            // Create newEnvNameWithUrl and check return value
-            env = envClient.Create(newEnvNameWithUrl, newEnvNameExternalUrl);
-            StringAssert.AreEqualIgnoringCase(newEnvNameWithUrl, env.Name);
-            StringAssert.StartsWith(newEnvSlugNameWithUrlStart, env.Slug);
-            Assert.NotZero(env.Id);
-            StringAssert.AreEqualIgnoringCase(newEnvNameExternalUrl, env.ExternalUrl);
+        // Validate environment doesn't exist yet
+        Assert.That(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToDelete, StringComparison.Ordinal)), Is.Null);
 
-            // Validate new environment are present in All
-            env = envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameNoUrl, StringComparison.Ordinal));
-            Assert.IsNotNull(env);
-            StringAssert.StartsWith(newEnvSlugNameNoUrlStart, env.Slug);
-            Assert.NotZero(env.Id);
-            Assert.IsNull(env.ExternalUrl);
+        // Create newEnvNameToDelete
+        var env = envClient.Create(newEnvNameToDelete, externalUrl: null);
+        var initialEnvId = env.Id;
 
-            env = envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameWithUrl, StringComparison.Ordinal));
-            Assert.IsNotNull(env);
-            StringAssert.StartsWith(newEnvSlugNameWithUrlStart, env.Slug);
-            Assert.NotZero(env.Id);
-            StringAssert.AreEqualIgnoringCase(newEnvNameExternalUrl, env.ExternalUrl);
-        }
+        // Validate newEnvNameToDelete is present & available
+        env = envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToDelete, StringComparison.Ordinal));
+        Assert.That(env, Is.Not.Null);
+        Assert.That(env.State, Is.EqualTo("available").IgnoreCase);
 
-        [Test]
-        [NGitLabRetry]
-        public async Task Edit()
-        {
-            using var context = await GitLabTestContext.CreateAsync();
-            var project = context.CreateProject();
-            var envClient = context.Client.GetEnvironmentClient(project.Id);
+        // Trying to delete without stopping beforehand will throw...
+        Assert.Throws<GitLabException>(() => envClient.Delete(initialEnvId));
 
-            var newEnvNameToEdit = "env_test_name_to_edit_init";
-            var newEnvNameUpdated = "env_test_name_to_edit_updated";
-            var newEnvSlugNameUpdatedStart = GetSlugNameStart(newEnvNameUpdated);
-            var newEnvNameExternalUrlUpdated = "https://www.example.com/updated";
+        // Stop
+        envClient.Stop(initialEnvId);
+        env = envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToDelete, StringComparison.Ordinal));
+        Assert.That(env.State, Is.EqualTo("stopped").IgnoreCase);
 
-            // Validate environments doesn't exist yet
-            Assert.IsNull(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToEdit, StringComparison.Ordinal) || string.Equals(e.Name, newEnvNameUpdated, StringComparison.Ordinal)));
+        // Delete
+        envClient.Delete(initialEnvId);
 
-            // Create newEnvNameToEdit
-            var env = envClient.Create(newEnvNameToEdit, externalUrl: null);
-            var initialEnvId = env.Id;
+        // Validate delete is effective
+        Assert.That(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToDelete, StringComparison.Ordinal)), Is.Null);
+    }
 
-            // Validate newEnvNameToEdit is present
-            Assert.IsNotNull(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToEdit, StringComparison.Ordinal)));
+    [Test]
+    [NGitLabRetry]
+    public async Task Stop()
+    {
+        using var context = await GitLabTestContext.CreateAsync();
+        var project = context.CreateProject();
+        var envClient = context.Client.GetEnvironmentClient(project.Id);
 
-            // Edit and check return value
-            env = envClient.Edit(initialEnvId, newEnvNameUpdated, newEnvNameExternalUrlUpdated);
-            StringAssert.AreEqualIgnoringCase(newEnvNameUpdated, env.Name);
-            StringAssert.StartsWith(newEnvSlugNameUpdatedStart, env.Slug);
-            Assert.AreEqual(initialEnvId, env.Id, "Environment Id should not change");
-            StringAssert.AreEqualIgnoringCase(newEnvNameExternalUrlUpdated, env.ExternalUrl);
+        var newEnvNameToStop = "env_test_name_to_stop";
+        var newEnvSlugNameToStopStart = GetSlugNameStart(newEnvNameToStop);
 
-            // Validate update is effective
-            env = envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameUpdated, StringComparison.Ordinal));
-            Assert.IsNotNull(env);
-            StringAssert.StartsWith(newEnvSlugNameUpdatedStart, env.Slug);
-            Assert.AreEqual(initialEnvId, env.Id, "Environment Id should not change");
-            StringAssert.AreEqualIgnoringCase(newEnvNameExternalUrlUpdated, env.ExternalUrl);
-        }
+        // Validate environment doesn't exist yet
+        Assert.That(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToStop, StringComparison.Ordinal)), Is.Null);
 
-        [Test]
-        [NGitLabRetry]
-        public async Task Delete()
-        {
-            using var context = await GitLabTestContext.CreateAsync();
-            var project = context.CreateProject();
-            var envClient = context.Client.GetEnvironmentClient(project.Id);
+        // Create newEnvNameToStop
+        var env = envClient.Create(newEnvNameToStop, externalUrl: null);
+        var initialEnvId = env.Id;
 
-            var newEnvNameToDelete = "env_test_name_to_delete";
+        // Validate newEnvNameToStop is present
+        Assert.That(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToStop, StringComparison.Ordinal)), Is.Not.Null);
 
-            // Validate environment doesn't exist yet
-            Assert.IsNull(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToDelete, StringComparison.Ordinal)));
+        // Stop and check return value
+        env = envClient.Stop(initialEnvId);
+        Assert.That(env.Name, Is.EqualTo(newEnvNameToStop).IgnoreCase);
+        Assert.That(env.Slug, Does.StartWith(newEnvSlugNameToStopStart));
+        Assert.That(env.Id, Is.EqualTo(initialEnvId), "Environment Id should not change");
+        Assert.That(env.ExternalUrl, Is.Null);
 
-            // Create newEnvNameToDelete
-            var env = envClient.Create(newEnvNameToDelete, externalUrl: null);
-            var initialEnvId = env.Id;
+        // Validate environment is still present
+        Assert.That(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToStop, StringComparison.Ordinal)), Is.Not.Null);
+    }
 
-            // Validate newEnvNameToDelete is present & available
-            env = envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToDelete, StringComparison.Ordinal));
-            Assert.IsNotNull(env);
-            StringAssert.AreEqualIgnoringCase("available", env.State);
+    [Test]
+    [NGitLabRetry]
+    public async Task QueryByState()
+    {
+        // Arrange
+        using var context = await GitLabTestContext.CreateAsync();
+        var project = context.CreateProject();
+        var envClient = context.Client.GetEnvironmentClient(project.Id);
 
-            // Trying to delete without stopping beforehand will throw...
-            Assert.Throws<GitLabException>(() => envClient.Delete(initialEnvId));
+        var newEnvNameToStop = "env_test_name_to_stop";
+        var stoppedEnv = envClient.Create(newEnvNameToStop, externalUrl: null);
+        envClient.Stop(stoppedEnv.Id);
 
-            // Stop
-            envClient.Stop(initialEnvId);
-            env = envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToDelete, StringComparison.Ordinal));
-            StringAssert.AreEqualIgnoringCase("stopped", env.State);
+        var newEnvNameAvailable = "env_test_name_available";
+        var availableEnv = envClient.Create(newEnvNameAvailable, externalUrl: null);
 
-            // Delete
-            envClient.Delete(initialEnvId);
+        // Act
+        var availableEnvs = envClient.GetEnvironmentsAsync(new EnvironmentQuery { State = "available" });
 
-            // Validate delete is effective
-            Assert.IsNull(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToDelete, StringComparison.Ordinal)));
-        }
+        // Assert
+        Assert.That(envClient.All.Count(), Is.EqualTo(2));
+        var availableEnvResult = availableEnvs.Single();
+        Assert.That(availableEnvResult.Name, Is.EqualTo(newEnvNameAvailable));
+        Assert.That(availableEnvResult.State, Is.EqualTo("available"));
+    }
 
-        [Test]
-        [NGitLabRetry]
-        public async Task Stop()
-        {
-            using var context = await GitLabTestContext.CreateAsync();
-            var project = context.CreateProject();
-            var envClient = context.Client.GetEnvironmentClient(project.Id);
+    [Test]
+    [NGitLabRetry]
+    public async Task QueryByName()
+    {
+        // Arrange
+        using var context = await GitLabTestContext.CreateAsync();
+        var project = context.CreateProject();
+        var envClient = context.Client.GetEnvironmentClient(project.Id);
 
-            var newEnvNameToStop = "env_test_name_to_stop";
-            var newEnvSlugNameToStopStart = GetSlugNameStart(newEnvNameToStop);
+        var devEnvName = "dev";
+        var devEnvironment = envClient.Create(devEnvName, externalUrl: null);
 
-            // Validate environment doesn't exist yet
-            Assert.IsNull(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToStop, StringComparison.Ordinal)));
+        var prodEnvName = "production";
+        var prodEnvironment = envClient.Create(prodEnvName, externalUrl: null);
 
-            // Create newEnvNameToStop
-            var env = envClient.Create(newEnvNameToStop, externalUrl: null);
-            var initialEnvId = env.Id;
+        // Act
+        var prodEnvs = envClient.GetEnvironmentsAsync(new EnvironmentQuery { Name = prodEnvName });
 
-            // Validate newEnvNameToStop is present
-            Assert.IsNotNull(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToStop, StringComparison.Ordinal)));
+        // Assert
+        Assert.That(envClient.All.Count(), Is.EqualTo(2));
+        var availableEnvResult = prodEnvs.Single();
+        Assert.That(availableEnvResult.Name, Is.EqualTo(prodEnvName));
+    }
 
-            // Stop and check return value
-            env = envClient.Stop(initialEnvId);
-            StringAssert.AreEqualIgnoringCase(newEnvNameToStop, env.Name);
-            StringAssert.StartsWith(newEnvSlugNameToStopStart, env.Slug);
-            Assert.AreEqual(initialEnvId, env.Id, "Environment Id should not change");
-            Assert.IsNull(env.ExternalUrl);
+    [Test]
+    [NGitLabRetry]
+    public async Task QueryBySearch()
+    {
+        // Arrange
+        using var context = await GitLabTestContext.CreateAsync();
+        var project = context.CreateProject();
+        var envClient = context.Client.GetEnvironmentClient(project.Id);
 
-            // Validate environment is still present
-            Assert.IsNotNull(envClient.All.FirstOrDefault(e => string.Equals(e.Name, newEnvNameToStop, StringComparison.Ordinal)));
-        }
+        var devEnvName = "dev";
+        var devEnvironment = envClient.Create(devEnvName, externalUrl: null);
 
-        [Test]
-        [NGitLabRetry]
-        public async Task QueryByState()
-        {
-            // Arrange
-            using var context = await GitLabTestContext.CreateAsync();
-            var project = context.CreateProject();
-            var envClient = context.Client.GetEnvironmentClient(project.Id);
+        var dev2EnvName = "dev2";
+        var dev2Environment = envClient.Create(dev2EnvName, externalUrl: null);
 
-            var newEnvNameToStop = "env_test_name_to_stop";
-            var stoppedEnv = envClient.Create(newEnvNameToStop, externalUrl: null);
-            envClient.Stop(stoppedEnv.Id);
+        var prodEnvName = "production";
+        var prodEnvironment = envClient.Create(prodEnvName, externalUrl: null);
 
-            var newEnvNameAvailable = "env_test_name_available";
-            var availableEnv = envClient.Create(newEnvNameAvailable, externalUrl: null);
+        // Act
+        var devEnvs = envClient.GetEnvironmentsAsync(new EnvironmentQuery { Search = "dev" });
 
-            // Act
-            var availableEnvs = envClient.GetEnvironmentsAsync(new EnvironmentQuery { State = "available" });
+        // Assert
+        Assert.That(envClient.All.Count(), Is.EqualTo(3));
+        Assert.That(devEnvs.Count(), Is.EqualTo(2));
+        Assert.That(devEnvs, Is.All.Matches<EnvironmentInfo>(e => e.Name.Contains("dev", StringComparison.Ordinal)));
+    }
 
-            // Assert
-            Assert.AreEqual(2, envClient.All.Count());
-            var availableEnvResult = availableEnvs.Single();
-            Assert.AreEqual(newEnvNameAvailable, availableEnvResult.Name);
-            Assert.AreEqual("available", availableEnvResult.State);
-        }
+    [Test]
+    [NGitLabRetry]
+    public async Task GetById()
+    {
+        // Arrange
+        using var context = await GitLabTestContext.CreateAsync();
+        var project = context.CreateProject();
+        var envClient = context.Client.GetEnvironmentClient(project.Id);
 
-        [Test]
-        [NGitLabRetry]
-        public async Task QueryByName()
-        {
-            // Arrange
-            using var context = await GitLabTestContext.CreateAsync();
-            var project = context.CreateProject();
-            var envClient = context.Client.GetEnvironmentClient(project.Id);
+        var devEnvName = "dev";
+        var devEnvironment = envClient.Create(devEnvName, externalUrl: null);
 
-            var devEnvName = "dev";
-            var devEnvironment = envClient.Create(devEnvName, externalUrl: null);
+        // Act
+        var devEnv = await envClient.GetByIdAsync(devEnvironment.Id);
 
-            var prodEnvName = "production";
-            var prodEnvironment = envClient.Create(prodEnvName, externalUrl: null);
-
-            // Act
-            var prodEnvs = envClient.GetEnvironmentsAsync(new EnvironmentQuery { Name = prodEnvName });
-
-            // Assert
-            Assert.AreEqual(2, envClient.All.Count());
-            var availableEnvResult = prodEnvs.Single();
-            Assert.AreEqual(prodEnvName, availableEnvResult.Name);
-        }
-
-        [Test]
-        [NGitLabRetry]
-        public async Task QueryBySearch()
-        {
-            // Arrange
-            using var context = await GitLabTestContext.CreateAsync();
-            var project = context.CreateProject();
-            var envClient = context.Client.GetEnvironmentClient(project.Id);
-
-            var devEnvName = "dev";
-            var devEnvironment = envClient.Create(devEnvName, externalUrl: null);
-
-            var dev2EnvName = "dev2";
-            var dev2Environment = envClient.Create(dev2EnvName, externalUrl: null);
-
-            var prodEnvName = "production";
-            var prodEnvironment = envClient.Create(prodEnvName, externalUrl: null);
-
-            // Act
-            var devEnvs = envClient.GetEnvironmentsAsync(new EnvironmentQuery { Search = "dev" });
-
-            // Assert
-            Assert.AreEqual(3, envClient.All.Count());
-            Assert.AreEqual(2, devEnvs.Count());
-            Assert.That(devEnvs, Is.All.Matches<EnvironmentInfo>(e => e.Name.Contains("dev", StringComparison.Ordinal)));
-        }
-
-        [Test]
-        [NGitLabRetry]
-        public async Task GetById()
-        {
-            // Arrange
-            using var context = await GitLabTestContext.CreateAsync();
-            var project = context.CreateProject();
-            var envClient = context.Client.GetEnvironmentClient(project.Id);
-
-            var devEnvName = "dev";
-            var devEnvironment = envClient.Create(devEnvName, externalUrl: null);
-
-            // Act
-            var devEnv = await envClient.GetByIdAsync(devEnvironment.Id);
-
-            // Assert
-            Assert.NotNull(devEnv);
-            Assert.AreEqual(devEnvName, devEnv.Name);
-        }
+        // Assert
+        Assert.That(devEnv, Is.Not.Null);
+        Assert.That(devEnv.Name, Is.EqualTo(devEnvName));
     }
 }

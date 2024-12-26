@@ -2,30 +2,29 @@
 using NGitLab.Impl;
 using NGitLab.Models;
 
-namespace NGitLab
+namespace NGitLab;
+
+public interface IMilestoneClient
 {
-    public interface IMilestoneClient
-    {
-        MilestoneScope Scope { get; }
+    MilestoneScope Scope { get; }
 
-        IEnumerable<Milestone> All { get; }
+    IEnumerable<Milestone> All { get; }
 
-        IEnumerable<Milestone> AllInState(MilestoneState state);
+    IEnumerable<Milestone> AllInState(MilestoneState state);
 
-        IEnumerable<Milestone> Get(MilestoneQuery query);
+    IEnumerable<Milestone> Get(MilestoneQuery query);
 
-        Milestone this[int id] { get; }
+    Milestone this[long id] { get; }
 
-        Milestone Create(MilestoneCreate milestone);
+    Milestone Create(MilestoneCreate milestone);
 
-        Milestone Update(int milestoneId, MilestoneUpdate milestone);
+    Milestone Update(long milestoneId, MilestoneUpdate milestone);
 
-        void Delete(int milestoneId);
+    void Delete(long milestoneId);
 
-        Milestone Close(int milestoneId);
+    Milestone Close(long milestoneId);
 
-        Milestone Activate(int milestoneId);
+    Milestone Activate(long milestoneId);
 
-        IEnumerable<MergeRequest> GetMergeRequests(int milestoneId);
-    }
+    IEnumerable<MergeRequest> GetMergeRequests(long milestoneId);
 }

@@ -190,4 +190,9 @@ project.lock.json
 
 # Rider
 .idea/
+
+# Verify
+*.received.*
+
+# macOS
 .DS_Store

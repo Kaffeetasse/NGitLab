@@ -1,11 +1,10 @@
-#nullable enable
+﻿#nullable enable
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public interface IIdOrPathAddressable
 {
-    public interface IIdOrPathAddressable
-    {
-        internal long Id { get; }
+    internal long Id { get; }
 
-        internal string? Path { get; }
-    }
+    internal string? Path { get; }
 }

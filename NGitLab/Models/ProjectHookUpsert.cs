@@ -2,39 +2,38 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class ProjectHookUpsert
 {
-    public class ProjectHookUpsert
-    {
-        [Required]
-        [JsonPropertyName("url")]
-        public Uri Url;
+    [Required]
+    [JsonPropertyName("url")]
+    public Uri Url { get; set; }
 
-        [JsonPropertyName("push_events")]
-        public bool PushEvents;
+    [JsonPropertyName("push_events")]
+    public bool PushEvents { get; set; }
 
-        [JsonPropertyName("merge_requests_events")]
-        public bool MergeRequestsEvents;
+    [JsonPropertyName("merge_requests_events")]
+    public bool MergeRequestsEvents { get; set; }
 
-        [JsonPropertyName("issues_events")]
-        public bool IssuesEvents;
+    [JsonPropertyName("issues_events")]
+    public bool IssuesEvents { get; set; }
 
-        [JsonPropertyName("tag_push_events")]
-        public bool TagPushEvents;
+    [JsonPropertyName("tag_push_events")]
+    public bool TagPushEvents { get; set; }
 
-        [JsonPropertyName("note_events")]
-        public bool NoteEvents;
+    [JsonPropertyName("note_events")]
+    public bool NoteEvents { get; set; }
 
-        [JsonPropertyName("job_events")]
-        public bool JobEvents;
+    [JsonPropertyName("job_events")]
+    public bool JobEvents { get; set; }
 
-        [JsonPropertyName("pipeline_events")]
-        public bool PipelineEvents;
+    [JsonPropertyName("pipeline_events")]
+    public bool PipelineEvents { get; set; }
 
-        [JsonPropertyName("enable_ssl_verification")]
-        public bool EnableSslVerification;
+    [JsonPropertyName("enable_ssl_verification")]
+    public bool EnableSslVerification { get; set; }
 
-        [JsonPropertyName("token")]
-        public string Token;
-    }
+    [JsonPropertyName("token")]
+    public string Token { get; set; }
 }

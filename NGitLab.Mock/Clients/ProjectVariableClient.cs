@@ -2,35 +2,40 @@
 using System.Collections.Generic;
 using NGitLab.Models;
 
-namespace NGitLab.Mock.Clients
+namespace NGitLab.Mock.Clients;
+
+internal sealed class ProjectVariableClient : ClientBase, IProjectVariableClient
 {
-    internal sealed class ProjectVariableClient : ClientBase, IProjectVariableClient
+    private readonly long _projectId;
+
+    public ProjectVariableClient(ClientContext context, ProjectId projectId)
+        : base(context)
     {
-        private readonly int _projectId;
+        _projectId = Server.AllProjects.FindProject(projectId.ValueAsString()).Id;
+    }
 
-        public ProjectVariableClient(ClientContext context, ProjectId projectId)
-            : base(context)
-        {
-            _projectId = Server.AllProjects.FindProject(projectId.ValueAsUriParameter()).Id;
-        }
+    public Variable this[string key] => this[key, null];
 
-        public Variable this[string key] => throw new NotImplementedException();
+    public Variable this[string key, string environmentScope] => throw new NotImplementedException();
 
-        public IEnumerable<Variable> All => throw new NotImplementedException();
+    public IEnumerable<Variable> All => throw new NotImplementedException();
 
-        public Variable Create(VariableCreate model)
-        {
-            throw new NotImplementedException();
-        }
+    public Variable Create(VariableCreate model)
+    {
+        throw new NotImplementedException();
+    }
 
-        public void Delete(string key)
-        {
-            throw new NotImplementedException();
-        }
+    public void Delete(string key) => Delete(key, null);
 
-        public Variable Update(string key, VariableUpdate model)
-        {
-            throw new NotImplementedException();
-        }
+    public void Delete(string key, string environmentScope)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Variable Update(string key, VariableUpdate model) => Update(key, null, model);
+
+    public Variable Update(string key, string environmentScope, VariableUpdate model)
+    {
+        throw new NotImplementedException();
     }
 }

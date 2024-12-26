@@ -1,10 +1,10 @@
+﻿using System;
 using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class Issue
 {
-    public class Issue : IssueBase
-    {
-        [JsonPropertyName("labels")]
-        public string[] Labels;
-    }
+    [JsonPropertyName("labels")]
+    public string[] Labels { get; set; }
 }

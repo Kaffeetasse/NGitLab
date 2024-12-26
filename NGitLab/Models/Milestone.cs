@@ -1,42 +1,42 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class Milestone
 {
-    public class Milestone
-    {
-        [JsonPropertyName("id")]
-        public int Id;
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
 
-        [JsonPropertyName("iid")]
-        public int Iid;
+    [JsonPropertyName("iid")]
+    public long Iid { get; set; }
 
-        [JsonPropertyName("title")]
-        public string Title;
+    [JsonPropertyName("title")]
+    public string Title { get; set; }
 
-        [JsonPropertyName("description")]
-        public string Description;
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
 
-        [JsonPropertyName("due_date")]
-        public string DueDate;
+    [JsonPropertyName("due_date")]
+    public string DueDate { get; set; }
 
-        [JsonPropertyName("group_id")]
-        public int? GroupId;
+    [JsonPropertyName("group_id")]
+    public long? GroupId { get; set; }
 
-        [JsonPropertyName("project_id")]
-        public int? ProjectId;
+    [JsonPropertyName("project_id")]
+    public long? ProjectId { get; set; }
 
-        [JsonPropertyName("start_date")]
-        public string StartDate;
+    [JsonPropertyName("start_date")]
+    public string StartDate { get; set; }
 
-        [JsonPropertyName("state")]
-        public string State;
+    [JsonPropertyName("state")]
+    public string State { get; set; }
 
-        [JsonPropertyName("created_at")]
-        public DateTime CreatedAt;
+    [JsonPropertyName("created_at")]
+    public DateTime CreatedAt { get; set; }
 
-        [JsonPropertyName("updated_at")]
-        public DateTime UpdatedAt;
+    [JsonPropertyName("updated_at")]
+    public DateTime UpdatedAt { get; set; }
 
         [JsonPropertyName("web_url")]
         public string WebUrl;

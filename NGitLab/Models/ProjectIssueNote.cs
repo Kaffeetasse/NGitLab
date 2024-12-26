@@ -1,44 +1,43 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace NGitLab.Models
+namespace NGitLab.Models;
+
+public class ProjectIssueNote
 {
-    public class ProjectIssueNote
-    {
-        [JsonPropertyName("id")]
-        public int NoteId;
+    [JsonPropertyName("id")]
+    public long NoteId { get; set; }
 
-        [JsonPropertyName("body")]
-        public string Body;
+    [JsonPropertyName("body")]
+    public string Body { get; set; }
 
-        [JsonPropertyName("attachment")]
-        public string Attachment;
+    [JsonPropertyName("attachment")]
+    public string Attachment { get; set; }
 
-        [JsonPropertyName("author")]
-        public Author Author;
+    [JsonPropertyName("author")]
+    public Author Author { get; set; }
 
-        [JsonPropertyName("created_at")]
-        public DateTime CreatedAt;
+    [JsonPropertyName("created_at")]
+    public DateTime CreatedAt { get; set; }
 
-        [JsonPropertyName("updated_at")]
-        public DateTime UpdatedAt;
+    [JsonPropertyName("updated_at")]
+    public DateTime UpdatedAt { get; set; }
 
-        [JsonPropertyName("system")]
-        public bool System;
+    [JsonPropertyName("system")]
+    public bool System { get; set; }
 
-        [JsonPropertyName("noteable_id")]
-        public int NoteableId;
+    [JsonPropertyName("noteable_id")]
+    public long NoteableId { get; set; }
 
-        [JsonPropertyName("noteable_type")]
-        public string NoteableType;
+    [JsonPropertyName("noteable_type")]
+    public string NoteableType { get; set; }
 
-        [JsonPropertyName("noteable_iid")]
-        public int Noteable_Iid;
+    [JsonPropertyName("noteable_iid")]
+    public long Noteable_Iid { get; set; }
 
-        [JsonPropertyName("resolvable")]
-        public bool Resolvable;
+    [JsonPropertyName("resolvable")]
+    public bool Resolvable { get; set; }
 
-        [JsonPropertyName("confidential")]
-        public bool Confidential;
-    }
+    [JsonPropertyName("confidential")]
+    public bool Confidential { get; set; }
 }

@@ -1,34 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using NGitLab.Extensions;
 using NGitLab.Models;
 
-namespace NGitLab.Impl
+namespace NGitLab.Impl;
+
+public class TriggerClient : ITriggerClient
 {
-    public class TriggerClient : ITriggerClient
+    private readonly API _api;
+    private readonly string _triggersPath;
+
+    public TriggerClient(API api, ProjectId projectId)
     {
-        private readonly API _api;
-        private readonly string _triggersPath;
+        _api = api;
+        _triggersPath = $"{Project.Url}/{projectId.ValueAsUriParameter()}/triggers";
+    }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public TriggerClient(API api, int projectId)
-            : this(api, (long)projectId)
-        {
-        }
+    public Trigger this[long id] => _api.Get().To<Trigger>(_triggersPath + "/" + id.ToStringInvariant());
 
-        public TriggerClient(API api, ProjectId projectId)
-        {
-            _api = api;
-            _triggersPath = $"{Project.Url}/{projectId.ValueAsUriParameter()}/triggers";
-        }
+    public IEnumerable<Trigger> All => _api.Get().GetAll<Trigger>(_triggersPath);
 
-        public Trigger this[int id] => _api.Get().To<Trigger>(_triggersPath + "/" + id.ToStringInvariant());
-
-        public IEnumerable<Trigger> All => _api.Get().GetAll<Trigger>(_triggersPath);
-
-        public Trigger Create(string description)
-        {
-            return _api.Post().To<Trigger>($"{_triggersPath}?description={description}");
-        }
+    public Trigger Create(string description)
+    {
+        return _api.Post().To<Trigger>($"{_triggersPath}?description={description}");
     }
 }
